@@ -1,0 +1,270 @@
+﻿.NET Framework 2001 C# 1.0 => Windows 
+2.0
+3.0
+4.0
+4.5, 4.6, 4.7.....
+
+2016 => .NET Core 1.0 
+Cross Platform => Win, Mac, Linux
+Open Source, GitHub, Modul bases and Cloud Ready
+Built in DI (Depedency Injetion)
+
+2018 => .NET Core 2.0 
+2019 => .NET Core 3.0
+2020 => .NET 5
+2021 => .NET 6, C# 10, ASP.NET Core 6 (Web App, Web API), Entity Framework Core 6 (ORM => database) => 2 weeks 
+
+
+ASP.NET Core => Web
+
+ASP.NET Core MVC
+
+Key Concepts =>
+Model
+View => UI Elements => button, input, radio buttons, dropdownns =>
+		HTML => CSS, JS  [ Tag Helpers and HTML Helpers => MVC Specific => Converted to HTML and send to the browser ]
+	 => Browser =>
+Controller
+
+HTTP => GET (Browser)
+
+ASP.NET Core => respond to the request
+
+ASP.NET MVC
+Terminal 
+Postman =>
+
+C#, Java, Python HTTP 
+
+Domain GET
+http://www.example.com/employee/details/22
+http://www.example.com/employee/Top30SalaryEmployees
+
+// create a new employee
+http://www.example.com/employee/create
+
+1. URL meaningful =>
+ 1 part is Domian
+ 2nd part is MVC Controller
+ 
+ 
+ C# class that inherits from Controller 
+ 
+ // MVC Controller
+ public class EmployeeController : Controller
+ {
+ 
+   [HttpGet]
+   public IActionResult Create() 
+   {
+		return View();
+   }
+   
+   [HttpPost]
+   public IActionResult Create(Employee employee) 
+   {
+		// save to databsae
+		// return View("Home");
+   }
+ 
+	// will have multiple action methods
+	// Action method name should be matching with 3rd part of the URL
+	// Attributes in C#
+	[HttpGet]
+	public IActionResult Details(int id) 
+	{
+		// Logic
+		//.. go to database and get employee details for 22
+		// Model = represents the data that you need for the View
+		// Entities => represents the columns/properties Tables
+		var employeeDetails = EmployeeService.GetEmployeeDetails(id);
+		return View(employeeDetails);
+		
+	}
+	
+	[HttpGet]
+	public IActionResult Top30SalaryEmployees () 
+	{
+		var employees = EmployeeService.GetTopEmployees();
+		return View(employees);
+		
+	}
+	
+	}
+	// Entity class
+	public class Employee 
+	{
+		// 20 prepoties
+	}
+	
+	// Model
+	public class EmployeeDetailsResponseModel 
+	{
+		// 5 properties
+	}
+	
+	
+ }
+
+
+Make sure our code is peoperly strucutred and should be maintanable and testable, loosly coupled 
+Clean-architecture, Onion Architecture, n-Layer architecture
+
+1. ApplicationCore is the base of your projet => it does not have any dependencies on any other projects
+	Entities
+	Models
+	Helpers
+	Interfaces => Repository Interfaces, Service Interfaces
+
+2. Infrastructure => Reference ApplicationCore
+	Data Logic (Implentation of Repository Interfaces) => Savin to database, getting data from database, Repostory classes
+	Service - Business Logic ((Implentation of Service Interfaces)) => Registring User, Hash his/her password, sending emails,  
+
+3. UI ASP.NET MVC => References ApplicationCore and Infrastructure
+		Controllers
+		Views
+		
+in ASP.NET Core 6 version we dont have startup.cs file
+in previos ASP.NET Core versions we had both program.cs and startup.cs
+ASP.NET 6 Unifies Startup.cs and Program.cs into a single Program.cs file.
+
+in older asp.net core Startup has two important methods
+	1. ConfigureServices => DI
+	2. Configure	=> Middlewares
+
+Repository => Abstarct the data access Logic => They get the data from Database and map  them to Entity Classes
+
+1. RAW => Low Level API => ADO.NET => SQLCommand, SQLConnection => execute SP, secute SQL and then map the data to object
+        => Manually
+2. Dapper => micro ORM => Object Relational Mapping => StackOverflow
+3. Entity Framework Core =>  
+
+
+Services => Contain the actual business Logic and they return the Models to the MVC App Controller
+
+List<Movie> Entity objects   in a method => List<MovieResponseModles> Models
+
+
+List<MovieCardResponseModel>
+
+public class MovieCardResponseModel 
+{
+	Id
+	Title
+	PosterUrl
+}
+
+
+Depedency Injection => First Class Citizen in .NET Core
+
+Tigtly Coupled Code, hard to test and maintain and add any addi
+new() convinient => 
+
+Higheer Level Abstactions
+
+
+IMovieRepository : IRepository
+{
+	7 methods
+}
+
+MovieRepostory : IMovieRepository 
+{
+	Implentation 7 methods
+	EF Core to access the database
+	SQL Server
+}
+
+DapperMovieReposiroy: IMovieRepository 
+{
+	// Dapper with Postgres Databse
+}
+
+
+1. Create an Abstractions => interfaces
+2. Use Constructor INjection, create private readonly filed for the interfaces
+	Inject the actual implementation with DI from Startup/Program.cs
+	You can change the implementations as needed
+
+
+3 ways => 99 % Constructor INjection
+			Method Injection
+			Property INjetion
+
+HomeController controller = new HomeController(new );
+
+.NET Framework they didn;t had DI support built-in
+3rdy party DI IOC
+Autofac
+Ninject
+
+20 controller in ASP.NET
+
+3 controllers wanna use MOvieService for IMovieService
+4 controllers wanna use MovieMOckService for IMovieService
+
+AutoFac 
+
+
+TO Access any Database in C#, 
+1. ADO.NET
+2. ORM option
+	micro ORM => Dapper
+	ORM=> Entity Framework
+
+
+ADO.NET
+	1. Make sure you have database ready
+	2. To get any data from database we need to use classes such as SqlConnection, SqlCommand, then execute them and
+		map the SQL data to the objects
+	3. You need to write lots of repeated code through out your application, takes lots of time for larger application
+    4. Performance wise very good
+ORM
+	Dapper- micro ORM
+		1. Make sure you have database ready
+		2. Built on top of ADO.NET classes, they are collection of extension methods
+		3. You need to write SQL Statements and write SP
+		4. Mapping of the objects is done easily by dapper.(saves the time)
+		5. Performance wise as good as ADO.NET
+
+	Entity Framework
+		1. You can create a complete database without writing single line of SQL Code, by using just C# 
+			objects and some special classes in EF using Migrations.
+		2. You dont need to write any SP, SQL statements to get the data, write LINQ and have EF transalte the LINQ to SQL
+			and it will exeute and automatically map the data to C# objects
+		3. EF performce is a bit slower compared to dapper or ado.net but EF Core 6, its performance is as good as Dapper
+			in lots of cases
+		4. If youn write in-efficient LINQ statements => then EF will generate in-efficient SQL statements.
+
+
+		EF has two most imporant classes
+		1. DbContext => Represents your database
+		2. DbSet => Represents your Table
+
+Steps for Creating the Database using EF Core
+	we had two approaches to use EF
+	1. *** Code-First approach => Create the databse with C# code and use EF ***
+	2. Database-First approach => you need to have database already created and then use EF 
+
+	1. Extension methods
+	2. Func and Action delegates
+	3. LINQ methods => 
+		1. First()
+		2. FirstOrDefault()
+		3. Single()
+		4. SingleOrDefault()
+		5. Where()
+		6. Any()
+		7. GroupBy()
+		8. Select()
+	4. Anonymous Types and methods
+
+
+
+
+
+
+
+
+
+
