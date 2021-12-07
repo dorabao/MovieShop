@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace ApplicationCore.Entities
 {
     public class Movie
@@ -26,6 +27,8 @@ namespace ApplicationCore.Entities
         public DateTime? UpdatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }
+
+        public List<Trailer> Trailers { get; set; }
 
     }
 }

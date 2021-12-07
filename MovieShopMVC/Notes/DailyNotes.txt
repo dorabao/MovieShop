@@ -1,4 +1,4 @@
-﻿.NET Framework 2001 C# 1.0 => Windows 
+.NET Framework 2001 C# 1.0 => Windows 
 2.0
 3.0
 4.0
@@ -13,7 +13,6 @@ Built in DI (Depedency Injetion)
 2019 => .NET Core 3.0
 2020 => .NET 5
 2021 => .NET 6, C# 10, ASP.NET Core 6 (Web App, Web API), Entity Framework Core 6 (ORM => database) => 2 weeks 
-
 
 ASP.NET Core => Web
 
@@ -260,6 +259,30 @@ Steps for Creating the Database using EF Core
 	4. Anonymous Types and methods
 
 
+EF Core to create the Database, Migrations to create/change database
+
+1. Configure the connection string in our application so that we can use that connection string with EF
+    1. SQL Server name, database name, authentication
+2. We configure connection string inside the appsettings.json
+3. DbContext=> represents our database and DbSet=> Represents our table
+4. Install required Entity Framework Packages EF Core, EF Core SQl Server, Ef Core design
+in both Infrastructure and MVC projects 
+Create our custom DbContext class that inherits from DbContext class
+5. Inject the connection string into the MovieShopSbContext constructor using DbContextOptions from 
+Startup or Program.cs file
+6. Create our Genre Table, ORM (Object Relational Mapping) by creating Genre Entity (object) with all the required
+properties based on columns
+7. Create the DbSet property for the entities
+8. Create your very first migration
+9. EF has convention where if you have a property called Id then it will by default make it as PK
+10. Run update database to execute the migration 
+11. WE have DataAnnotations and Fluent API to model our database and table
+12. Whenever you change your entity/model with DataAnnotations or Fluent API, make sure you add a new Migration
+and update-database, always give meaningful name to your migrations, do not give xyz, abc, test names
+
+
+ 
+    
 
 
 
