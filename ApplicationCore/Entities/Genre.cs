@@ -12,4 +12,5 @@ public class Genre
     [MaxLength(24)]
     public string Name { get; set; }
     
+    public List<MovieGenre> MoviesOfGenre { get; set; }
 }

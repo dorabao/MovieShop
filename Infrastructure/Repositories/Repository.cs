@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.RepositoryInterfaces;
+using Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,11 @@ namespace Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T: class
     {
+        protected readonly MovieShopDbContext _dbContext;
+        public Repository(MovieShopDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public T Add(T entity)
         {
             throw new NotImplementedException();
@@ -21,12 +27,13 @@ namespace Infrastructure.Repositories
 
         public List<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbContext.Set<T>().ToList();
         }
 
         public T GetById(int id)
         {
-            throw new NotImplementedException();
+            var entity = _dbContext.Set<T>().Find(id);
+            return entity;
         }
 
         public T Update(T entity)

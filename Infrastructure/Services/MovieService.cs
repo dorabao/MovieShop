@@ -28,7 +28,7 @@ namespace Infrastructure.Services
             {
                 movieCards.Add(
                     new MovieCardResponseModel { Id = movie.Id, PosterUrl = movie.PosterUrl, Title = movie.Title }
-                    );
+                );
             }
 
             return movieCards;

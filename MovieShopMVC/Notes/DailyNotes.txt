@@ -279,7 +279,28 @@ properties based on columns
 11. WE have DataAnnotations and Fluent API to model our database and table
 12. Whenever you change your entity/model with DataAnnotations or Fluent API, make sure you add a new Migration
 and update-database, always give meaningful name to your migrations, do not give xyz, abc, test names
+13. To create Many - Many relationship we need Junction table in Relational database
 
+
+EF COre 5 and before when we have aproperty of string
+
+		public string Title { get; set; } // it created them as nullable types in SQL Server
+        public string Overview { get; set; }
+
+
+
+Architecture of our Project
+
+Step 1 : Create Repository Interface based on your needs (repo per table), IGenreRepository, IUserRepository that inherits from IRepository, inside ApplicationCore 
+project, inside RepositoryInterfaces folder
+Step 2 : Implement Repository interfaces inside the Infrastructure project inside Repository folder and make sure the repositories inherut from base Repository<T>
+		Replace T with the entity type for example MovieRepository will inherit from Repository<Movie>
+Step 3: Create Service Interfaces (business logic) inside the ServiceInterfaces folder in ApplicationCore Project for ex: IMovieService, IGenreService
+		Services should always return Models rather than Entities, create Required Models inside th Models foolder such as GenreModel, MovieCardResponseModel etc
+Step 4: Implement Services inside the services folder inside Infrstructure Project, Services will use DI with repository interfaces
+		Register DI for both Repositories and Services intefaces in the Program.cs or startup.cs (.NET 5 and older)
+Step 5 : Call the services with DI from the required Controllers. For example HomeController will use MovieService with DI of IMovieService 
+ 
 
  
     

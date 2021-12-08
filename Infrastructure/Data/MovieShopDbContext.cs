@@ -20,19 +20,54 @@ public class MovieShopDbContext:DbContext
     public DbSet<Favorite> Favorites { get; set; }
     public DbSet<Cast> Casts { get; set; }
     public DbSet<Crew> Crews { get; set; }
+    public DbSet<MovieGenre> MovieGenres { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<MovieCrew> MovieCrews { get; set; }
+    public DbSet<MovieCast> MovieCasts { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Movie>(ConfigureMovie);
-        modelBuilder.Entity<Trailer>(ConfigureTrailer);
+        modelBuilder.Entity<MovieGenre>(ConfigureMovieGenre);
+        modelBuilder.Entity<UserRole>(ConfigureUserRole);
+        modelBuilder.Entity<MovieCrew>(ConfigureMovieCrew);
+        modelBuilder.Entity<MovieCast>(ConfigureMovieCast);
+        modelBuilder.Entity<Review>(ConfigureReview);
     }
 
-    private void ConfigureTrailer(EntityTypeBuilder<Trailer> builder)
+    private void ConfigureReview(EntityTypeBuilder<Review> builder)
     {
-        builder.ToTable("Trailer");
-        builder.HasKey(t => t.Id);
-        builder.Property(t => t.TrailerUrl).HasMaxLength(2084);
-        builder.Property(t => t.Name).HasMaxLength(2084);
+        builder.ToTable("Review");
+        builder.HasKey(r => new { r.MovieId, r.UserId });
+        builder.Property(r => r.Rating).HasColumnType("decimal(3, 2)").HasDefaultValue(9.9m);
+    }
+
+    private void ConfigureMovieCast(EntityTypeBuilder<MovieCast> builder)
+    {
+        builder.ToTable("MovieCast");
+        builder.HasKey(mc => new { mc.MovieId, mc.CastId, mc.Character});
+        builder.Property(mc => mc.Character).HasMaxLength(450);
+    }
+
+    private void ConfigureMovieCrew(EntityTypeBuilder<MovieCrew> builder)
+    {
+        builder.ToTable("MovieCrew");
+        builder.HasKey(mc => new { mc.MovieId, mc.CrewId, mc.Department, mc.Job });
+        builder.Property(mc => mc.Department).HasMaxLength(128);
+        builder.Property(mc => mc.Job).HasMaxLength(128);
+    }
+
+    private void ConfigureUserRole(EntityTypeBuilder<UserRole> builder)
+    {
+        builder.ToTable("UserRole");
+        builder.HasKey(ur => new { ur.UserId, ur.RoleId });
+    }
+
+    private void ConfigureMovieGenre(EntityTypeBuilder<MovieGenre> builder)
+    {
+        builder.ToTable("MovieGenre");
+        builder.HasKey(mg => new { mg.MovieId, mg.GenreId });
     }
 
     private void ConfigureMovie(EntityTypeBuilder<Movie> builder)

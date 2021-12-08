@@ -15,11 +15,13 @@ namespace ApplicationCore.Entities
 
         [MaxLength(128)]
         public string? Name { get; set; }
+
         public string? Gender { get; set; }
         public string? TmdbUrl { get; set; }
 
         [MaxLength(2084)]
         public string? ProfilePath { get; set; }
 
+        public List<MovieCrew> MoviesOfCrew { get; set; }
     }
 }
