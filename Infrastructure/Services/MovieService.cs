@@ -33,5 +33,61 @@ namespace Infrastructure.Services
 
             return movieCards;
         }
+
+        public MovieDetailsResponseModel GetMovieDetailsById(int id)
+        {
+            var movie = _movieRepository.GetById(id);
+
+            //map movie entity into MovieDetailsModel
+            //use automapper that can ne used for mapping one object to another object
+
+            var movieDetails = new MovieDetailsResponseModel
+            {
+                    Id = movie.Id,
+                    PosterUrl = movie.PosterUrl,
+                    Title = movie.Title,
+                    OriginalLanguage = movie.OriginalLanguage,
+                    Overview = movie.Overview,
+                    Rating = movie.Rating,
+                    RunTime = movie.RunTime,
+                    Tagline = movie.Tagline,
+                    BackdropUrl = movie.BackdropUrl,
+                    TmdbUrl = movie.TmdbUrl,
+                    ImdbUrl = movie.ImdbUrl,
+                    Price = movie.Price
+            };
+
+            foreach (var movieCast in movie.CastsOfMovie)
+            {
+                movieDetails.Casts.Add(new CastResponseModel
+                {
+                    Id = movieCast.CastId,
+                    Character = movieCast.Character,
+                    Name = movieCast.Cast.Name,
+                    PosterUrl = movieCast.Cast.ProfilePath
+                });
+            }
+
+            foreach (var trailer in movie.Trailers)
+            {
+                movieDetails.Trailers.Add(new TrailerResponseModel
+                {
+                    Id = trailer.Id,
+                    MovieId = trailer.MovieId,
+                    Name = trailer.Name,
+                    TrailerUrl = trailer.TrailerUrl
+                });
+            }
+
+            foreach (var movieGenre in movie.GenresOfMovie)
+            {
+                movieDetails.Genres.Add(new GenreModel 
+                {
+                    Id = movieGenre.GenreId,
+                    Name = movieGenre.Genre.Name,
+                });
+            }
+            return movieDetails;
+        }
     }
 }

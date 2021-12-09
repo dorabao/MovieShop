@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
             return _dbContext.Set<T>().ToList();
         }
 
-        public T GetById(int id)
+        public virtual T GetById(int id)
         {
             var entity = _dbContext.Set<T>().Find(id);
             return entity;
