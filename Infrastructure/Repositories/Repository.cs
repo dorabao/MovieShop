@@ -17,7 +17,9 @@ namespace Infrastructure.Repositories
         }
         public T Add(T entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Add(entity);
+            _dbContext.SaveChanges();
+            return entity;
         }
 
         public T Delete(int id)

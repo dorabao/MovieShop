@@ -19,7 +19,7 @@ namespace ApplicationCore.Entities
         [MaxLength(128)]
         public string? LastName { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         [MaxLength(256)]
         public string? Email { get; set; }
