@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using ApplicationCore.RepositoryInterfaces;
 using Infrastructure.Data;
 using System;
@@ -13,6 +14,11 @@ namespace Infrastructure.Repositories
     {
         public GenreRepository(MovieShopDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<List<GenreModel>> GetAllGenres()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,19 +13,19 @@ namespace MovieShopMVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(UserRegisterRequestModel userRegisterRequestModel)
+        public async Task<IActionResult> Register(UserRegisterRequestModel userRegisterRequestModel)
         {
             //need save the data in database (At first send the data to service
             //then it will convert the data into user entity and send it to user repository
             //then the data will be saved in user table)
             //will return to login page
-            var user = _accountService.RegisterUser(userRegisterRequestModel);
+            var user = await _accountService.RegisterUser(userRegisterRequestModel);
             if (user == 0)
             {
                 // email already exists
@@ -34,14 +34,20 @@ namespace MovieShopMVC.Controllers
             return RedirectToAction("Login");
         }
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(LoginRequestModel loginRequestModel)
+        public async Task<IActionResult> Login(LoginRequestModel loginRequestModel)
         {
+            var user = await _accountService.ValidateUser(loginRequestModel);
+            if (user == null)
+            { 
+                //please enter correct info
+            }
+            //we need to create cookie, then we will have information claims
             return View();
         }
     }
