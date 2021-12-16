@@ -12,9 +12,9 @@ namespace ApplicationCore.RepositoryInterfaces
     {
         Task<User> GetUserByEmail(string email);
 
-        Task<IEnumerable<Movie>> GetUserPurchasedMovies(int id);
+        Task<IEnumerable<Purchase>> GetUserPurchasedMovies(int id);
 
-        Task<IEnumerable<Movie>> GetUserFavoriteMovies(int id);
+        Task<IEnumerable<Favorite>> GetUserFavoriteMovies(int id);
 
         Task<User> GetUserDetails(int id);
 

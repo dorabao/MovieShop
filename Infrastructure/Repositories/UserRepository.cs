@@ -23,16 +23,17 @@ namespace Infrastructure.Repositories
             return user;
         }
 
-        public async Task<IEnumerable<Movie>> GetUserPurchasedMovies(int id)
+        public async Task<IEnumerable<Purchase>> GetUserPurchasedMovies(int id)
         {
-            dynamic purchasedMovies = await _dbContext.Purchases.Include(p => p.Movie).Where(p => p.UserId == id).ToListAsync();
+            var purchasedMovies = await _dbContext.Purchases.Include(p => p.Movie).Where(p => p.UserId == id).ToListAsync();
             if (purchasedMovies == null) return null;
+
             return purchasedMovies;
         }
 
-        public async Task<IEnumerable<Movie>> GetUserFavoriteMovies(int id)
+        public async Task<IEnumerable<Favorite>> GetUserFavoriteMovies(int id)
         {
-            dynamic favoriteMovies = await _dbContext.Favorites.Include(f => f.Movie).Where(f => f.UserId == id).ToListAsync();
+            var favoriteMovies = await _dbContext.Favorites.Include(f => f.Movie).Where(f => f.UserId == id).ToListAsync();
             if (favoriteMovies == null) return null;
             return favoriteMovies;
         }

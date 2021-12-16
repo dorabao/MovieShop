@@ -9,8 +9,8 @@ namespace ApplicationCore.ServiceInterfaces
 {
     public interface IUserService
     {
-        Task<List<MovieCardResponseModel>> GetUserPurchasedMovies(int id);
-        Task<List<MovieCardResponseModel>> GetUserFavoriteMovies(int id);
+        Task<IEnumerable<MovieCardResponseModel>> GetUserPurchasedMovies(int id);
+        Task<IEnumerable<MovieCardResponseModel>> GetUserFavoriteMovies(int id);
         Task<UserDetailsModel> GetUserDetails(int id);
         Task<bool> EditUserProfile(UserDetailsModel userDetailsModel, int id);
     }

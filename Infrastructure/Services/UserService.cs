@@ -24,28 +24,28 @@ namespace Infrastructure.Services
             return editStatus;
         }
 
-        public async Task<List<MovieCardResponseModel>> GetUserFavoriteMovies(int id)
+        public async Task<IEnumerable<MovieCardResponseModel>> GetUserFavoriteMovies(int id)
         {
             var favoriteMovies = await _userRepository.GetUserFavoriteMovies(id);
             var favoriteMovieCards = new List<MovieCardResponseModel>();
-            foreach (var movie in favoriteMovieCards)
+            foreach (var favoriteMovie in favoriteMovies)
             {
                 favoriteMovieCards.Add(
-                    new MovieCardResponseModel { Id = movie.Id, PosterUrl = movie.PosterUrl, Title = movie.Title }
+                    new MovieCardResponseModel { Id = favoriteMovie.Movie.Id, PosterUrl = favoriteMovie.Movie.PosterUrl, Title = favoriteMovie.Movie.Title }
                 );
             }
 
             return favoriteMovieCards;
         }
   
-        public async Task<List<MovieCardResponseModel>> GetUserPurchasedMovies(int id)
+        public async Task<IEnumerable<MovieCardResponseModel>> GetUserPurchasedMovies(int id)
         {
             var purchasedMovies = await _userRepository.GetUserPurchasedMovies(id);
             var purchasedMovieCards = new List<MovieCardResponseModel>();
-            foreach (var movie in purchasedMovies)
+            foreach (var purchasedMovie in purchasedMovies)
             {
                 purchasedMovieCards.Add(
-                    new MovieCardResponseModel { Id = movie.Id, PosterUrl = movie.PosterUrl, Title = movie.Title }
+                    new MovieCardResponseModel { Id = purchasedMovie.Movie.Id, PosterUrl = purchasedMovie.Movie.PosterUrl, Title = purchasedMovie.Movie.Title }
                 );
             }
 

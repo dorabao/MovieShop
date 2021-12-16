@@ -1,4 +1,5 @@
-﻿using ApplicationCore.ServiceInterfaces;
+﻿using ApplicationCore.Models;
+using ApplicationCore.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -20,7 +21,7 @@ namespace MovieShopMVC.Controllers
         {
             // go to User Service and call User Repository and get the Movies Purchased by user who loged in
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            // pass above user id to USer Service
+            // pass above user id to User Service
             var purchases = await _userService.GetUserPurchasedMovies(userId);
             return View(purchases);
         }
@@ -41,13 +42,22 @@ namespace MovieShopMVC.Controllers
             return View(userProfile);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> EditProfile()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(UserDetailsModel userDetailsModel)
+        {
             var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var userProfile = await _userService.GetUserDetails(userId);
-            var updatedProfile = await _userService.EditUserProfile(userProfile, userId);
-            return RedirectToAction("Profile");
+            var updatedProfile = await _userService.EditUserProfile(userDetailsModel, userId);
+            if (updatedProfile == true)
+            {
+                return RedirectToAction("Profile");
+            }
+            return View();
         }
     }
 }
