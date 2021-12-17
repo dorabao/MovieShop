@@ -8,6 +8,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using MovieShopMVC.Helpers;
 using Serilog;
 
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
+Log.Information("Starting up");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -40,6 +47,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/account/login";
     });
 
+//Wire Serilog into the WebApplicationBuilder
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console()
+    .ReadFrom.Configuration(ctx.Configuration));
 
 var app = builder.Build();
 
@@ -58,6 +69,7 @@ else
 
 
 // Configure method in old ASP.NET
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

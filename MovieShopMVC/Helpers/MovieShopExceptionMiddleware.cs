@@ -51,7 +51,7 @@ namespace MovieShopMVC.Helpers
             };
 
             // we are gonna use SeriLog to log above object to either JSON or Text Files
-
+            _logger.LogInformation(Newtonsoft.Json.JsonConvert.SerializeObject(errorDetails));
             _logger.LogInformation("-------------- END EXCEPTION ------------------");
             context.Response.Redirect("/Home/Error");
             await Task.CompletedTask;
