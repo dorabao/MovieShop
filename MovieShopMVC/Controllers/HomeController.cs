@@ -23,9 +23,6 @@ namespace MovieShopMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            int x = 0;
-            int y = 1;
-            int z = y / x;
             var movieCards = await _movieService.GetHighestGrossingMovies();
             return View(movieCards);
         }
