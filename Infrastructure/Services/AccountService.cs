@@ -19,7 +19,12 @@ namespace Infrastructure.Services
         {
             _userRepository = userRepository;
         }
-        
+
+        public async Task<UserRegisterRequestModel> GetRegisterForm()
+        {
+            var registerForm = new UserRegisterRequestModel();
+            return registerForm;
+        }
         public async Task<int> RegisterUser(UserRegisterRequestModel model)
         {
             //we have to make sure user does not exsits in our database;

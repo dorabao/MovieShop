@@ -20,6 +20,18 @@ namespace Infrastructure.Repositories
             return movies;
         }
 
+        public async Task<IEnumerable<Movie>> Get30HighestRatedMovies()
+        {
+            var movies = await _dbContext.Movies.OrderByDescending(m => m.Rating).Take(30).ToListAsync();
+            return movies;
+        }
+
+        public async Task<IEnumerable<Movie>> Get100NewReleaseMovies()
+        {
+            var movies = await _dbContext.Movies.OrderByDescending(m => m.ReleaseDate).Take(100).ToListAsync();
+            return movies;
+        }
+
         public async override Task<Movie> GetById(int id)
         {
             //call the movie dbset and join other info from genres, trailers, cast sbsets.
@@ -34,6 +46,20 @@ namespace Infrastructure.Repositories
                 .AverageAsync(r => r == null ? 0 : r.Rating);
             movieDetails.Rating = rating;
             return movieDetails;
+        }
+
+        public async Task<IEnumerable<MovieGenre>> GetMoviesByGenreId(int genreId)
+        {
+            var movies = await _dbContext.MovieGenres.Include(mg => mg.Movie).Where(mg => mg.GenreId == genreId).ToListAsync();
+            if (movies == null) return null;
+            return movies;
+        }
+
+        public async Task<IEnumerable<Review>> GetAllReviewsByMovieId(int id)
+        {
+            var reviews = await _dbContext.Reviews.Include(r => r.Movie).Where(r => r.MovieId == id).ToListAsync();
+            if (reviews == null) return null;
+            return reviews;
         }
     }
 }

@@ -18,6 +18,19 @@ namespace Infrastructure.Services
             _movieRepository = movieRepository;
         }
 
+        public async Task<IEnumerable<MovieCardResponseModel>> GetNewReleaseMovies()
+        {
+            var movies = await _movieRepository.Get100NewReleaseMovies();
+            var movieCards = new List<MovieCardResponseModel>();
+            foreach (var movie in movies)
+            {
+                movieCards.Add(
+                    new MovieCardResponseModel { Id = movie.Id, PosterUrl = movie.PosterUrl, Title = movie.Title }
+                );
+            }
+            return movieCards;
+        }
+
         public async Task<IEnumerable<MovieCardResponseModel>> GetHighestGrossingMovies()
         {
             // call my MovieRepository and get the data
@@ -30,8 +43,46 @@ namespace Infrastructure.Services
                     new MovieCardResponseModel { Id = movie.Id, PosterUrl = movie.PosterUrl, Title = movie.Title }
                 );
             }
-
             return movieCards;
+        }
+
+        public async Task<IEnumerable<MovieCardResponseModel>> GetHighestRatedMovies()
+        {
+            var movies = await _movieRepository.Get30HighestRatedMovies();
+            var movieCards = new List<MovieCardResponseModel>();
+            foreach (var movie in movies)
+            {
+                movieCards.Add(
+                    new MovieCardResponseModel { Id = movie.Id, PosterUrl = movie.PosterUrl, Title = movie.Title }
+                );
+            }
+            return movieCards;
+        }
+
+        public async Task<IEnumerable<MovieCardResponseModel>> GetAllMoviesByGenreId(int genreId)
+        {
+            var movies = await _movieRepository.GetMoviesByGenreId(genreId);
+            var movieCards = new List<MovieCardResponseModel>();
+            foreach (var movie in movies)
+            {
+                movieCards.Add(
+                    new MovieCardResponseModel { Id = movie.Movie.Id, PosterUrl = movie.Movie.PosterUrl, Title = movie.Movie.Title }
+                );
+            }
+            return movieCards;
+        }
+
+        public async Task<IEnumerable<ReviewResponseModel>> GetAllReviewsByMovieId(int id)
+        {
+            var reviews = await _movieRepository.GetAllReviewsByMovieId(id);
+            var reviewCards = new List<ReviewResponseModel>();
+            foreach (var review in reviews)
+            {
+                reviewCards.Add(
+                    new ReviewResponseModel {MovieId = review.MovieId, UserId = review.UserId, Rating = review.Rating, ReviewText = review.ReviewText }
+                );
+            }
+            return reviewCards;
         }
 
         public async Task<MovieDetailsResponseModel> GetMovieDetailsById(int id)
