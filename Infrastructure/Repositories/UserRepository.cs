@@ -68,5 +68,40 @@ namespace Infrastructure.Repositories
             _dbContext.SaveChanges();
             return editable;
         }
+
+        public async Task<IEnumerable<Review>> GetAllReviewsByUserId(int id)
+        {
+            var reviews = await _dbContext.Reviews.Include(r => r.User).Where(r => r.UserId == id).ToListAsync();
+            if (reviews == null) return null;
+            return reviews;
+        }
+
+        public async Task<Favorite> AddFavorite(Favorite favorite)
+        {
+            var addedFavorite = await _dbContext.Favorites.AddAsync(favorite);
+            _dbContext.SaveChanges();
+            return addedFavorite.Entity;
+        }
+
+        public async Task<Favorite> DeleteFavorite(Favorite favorite)
+        {
+            var addedFavorite = _dbContext.Favorites.Remove(favorite);
+            _dbContext.SaveChanges();
+            return addedFavorite.Entity;
+        }
+
+        public async Task<Purchase> PurchaseMovie(Purchase purchase)
+        {
+            var addedPurchase = await _dbContext.Purchases.AddAsync(purchase);
+            _dbContext.SaveChanges();
+            return addedPurchase.Entity;
+        }
+
+        public async Task<Review> AddReview(Review review)
+        {
+            var addedReview = await _dbContext.Reviews.AddAsync(review);
+            _dbContext.SaveChanges();
+            return addedReview.Entity;
+        }
     }
 }

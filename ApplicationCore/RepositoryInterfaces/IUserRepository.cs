@@ -19,5 +19,10 @@ namespace ApplicationCore.RepositoryInterfaces
         Task<User> GetUserDetails(int id);
 
         Task<bool> EditUserProfile(UserDetailsModel userDetailsModel, int id);
+        Task<IEnumerable<Review>> GetAllReviewsByUserId(int id);
+        Task<Favorite> AddFavorite(Favorite favorite);
+        Task<Purchase> PurchaseMovie(Purchase purchase);
+        Task<Review> AddReview(Review review);
+        Task<Favorite> DeleteFavorite(Favorite favorite);
     }
 }
