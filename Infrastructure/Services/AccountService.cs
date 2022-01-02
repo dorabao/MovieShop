@@ -15,16 +15,12 @@ namespace Infrastructure.Services
     public class AccountService : IAccountService
     {
         private readonly IUserRepository _userRepository;
+        
         public AccountService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<UserRegisterRequestModel> GetRegisterForm()
-        {
-            var registerForm = new UserRegisterRequestModel();
-            return registerForm;
-        }
         public async Task<int> RegisterUser(UserRegisterRequestModel model)
         {
             //we have to make sure user does not exsits in our database;
@@ -94,6 +90,12 @@ namespace Infrastructure.Services
                 return userLoginResponseModel;
             }
             return null;
+        }
+
+        public async Task<IEnumerable<PurchaseTotalResponseModel>> GetAllUsersPurchasedMovies()
+        {
+            var allUsersPurchases = await _userRepository.GetAllUsersPurchasedMovies();
+            return allUsersPurchases;
         }
     }
 }

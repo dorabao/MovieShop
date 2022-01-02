@@ -7,7 +7,6 @@ using System.Security.Claims;
 
 namespace MovieShop.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -16,24 +15,6 @@ namespace MovieShop.API.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
-        }
-        [HttpGet]
-        [Route("{id:int}/movie/{movieId:int}/favorite")]
-        public async Task<IActionResult> CheckFavoriteMovie(int id, int movieId)
-        {
-            var favorites = await _userService.GetUserFavoriteMovies(id);
-            if (!favorites.Any())
-            {
-                return NotFound();
-            }
-            foreach (var favorite in favorites)
-            {
-                if (favorite.Id == movieId)
-                { 
-                    return Ok(favorite);
-                }
-            }
-            return NotFound();
         }
 
         [HttpGet]
@@ -72,7 +53,6 @@ namespace MovieShop.API.Controllers
             return Ok(reviews);
         }
 
-        [Authorize]
         [HttpPost]
         [Route("favorite")]
         public async Task<IActionResult> AddFavoriteMovie([FromBody] MovieCardResponseModel model)
@@ -81,12 +61,11 @@ namespace MovieShop.API.Controllers
             var favoriteStatus = await _userService.AddFavoriteMovie(model, userId);
             if (favoriteStatus == false)
             {
-                return BadRequest();
+                return BadRequest("Can't add this movie");
             }
             return Ok("Add Successfully");
         }
 
-        [Authorize]
         [HttpPost]
         [Route("purchase")]
         public async Task<IActionResult> PurchaseMovie([FromBody] MovieDetailsResponseModel model)
@@ -95,12 +74,11 @@ namespace MovieShop.API.Controllers
             var purchaseStatus  = await _userService.PurchaseMovie(model, userId);
             if (purchaseStatus == false)
             {
-                return BadRequest();
+                return BadRequest("Can't purchase this movie");
             }
             return Ok("Purchase Successfully");
         }
 
-        [Authorize]
         [HttpPost]
         [Route("review")]
         public async Task<IActionResult> AddReview([FromBody] ReviewResponseModel model)
@@ -114,6 +92,60 @@ namespace MovieShop.API.Controllers
             return Ok("Add Successfully");
         }
 
+        [HttpPost]
+        [Route("unfavorite")]
+        public async Task<IActionResult> DeleteFavoriteMovie([FromBody] MovieCardResponseModel model)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var unfavoriteStatus = await _userService.DeleteFavoriteMovie(model, userId);
+            if (unfavoriteStatus == true)
+            {
+                return Ok("Unfavorite Successfully");
+            }
+            return BadRequest(); ;
+        }
 
+        [HttpPut]
+        [Route("review")]
+        public async Task<IActionResult> UpdateReview([FromBody] ReviewResponseModel model)
+        {
+            var updatedReview = await _userService.UpdateReview(model);
+            if (updatedReview == null)
+            {
+                return NotFound();
+            }
+            return Ok("Updated Successfully");
+        }
+
+        [HttpGet]
+        [Route("{id:int}/movie/{movieId:int}/favorite")]
+        public async Task<IActionResult> CheckFavoriteMovie(int id, int movieId)
+        {
+            var favorites = await _userService.GetUserFavoriteMovies(id);
+            if (!favorites.Any())
+            {
+                return NotFound();
+            }
+            foreach (var favorite in favorites)
+            {
+                if (favorite.Id == movieId)
+                {
+                    return Ok(favorite);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpDelete]
+        [Route("{userId:int}/movie/{movieId:int}")]
+        public async Task<IActionResult> DeleteMovie(int userId, int movieId)
+        {
+            var deletedStatus = await _userService.DeleteMovie(userId, movieId);
+            if (deletedStatus == false)
+            {
+                return NotFound();
+            }
+            return Ok("Deleted Successfully");
+        }
     }
 }

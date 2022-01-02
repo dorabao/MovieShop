@@ -99,6 +99,8 @@ namespace Infrastructure.Services
             if (addedStatus != null) return true;
             return false;
         }
+
+
         public async Task<bool> DeleteFavoriteMovie(MovieCardResponseModel model, int userId)
         {
             var allUserFavrites = await _userRepository.GetUserFavoriteMovies(userId);
@@ -106,7 +108,7 @@ namespace Infrastructure.Services
             {
                 if (favorite.MovieId == model.Id)
                 {
-                    var deleteStatus = await _userRepository.DeleteFavorite(favorite);
+                    await _userRepository.DeleteFavorite(favorite);
                     return true;
                 }
             }
@@ -158,6 +160,42 @@ namespace Infrastructure.Services
             if (addedStatus != null) return true;
             return false;
         }
-
+        public async Task<ReviewResponseModel> UpdateReview(ReviewResponseModel model)
+        {
+            var updatedReview = await _userRepository.UpdateReview(model);
+            if (updatedReview != null)
+            {
+                var newReviewModel = new ReviewResponseModel
+                {
+                    MovieId = updatedReview.MovieId,
+                    UserId = updatedReview.UserId,
+                    Rating = updatedReview.Rating,
+                    ReviewText = updatedReview.ReviewText,
+                };
+                return newReviewModel;
+            }
+            return null;
+        }
+        public async Task<bool> DeleteMovie(int userId, int movieId)
+        {
+            var allUserFavrites = await _userRepository.GetUserFavoriteMovies(userId);
+            foreach (var favorite in allUserFavrites)
+            {
+                if (favorite.MovieId == movieId)
+                {
+                    await _userRepository.DeleteFavorite(favorite);
+                }
+            }
+            var allUserPurchases = await _userRepository.GetUserPurchasedMovies(userId);
+            foreach (var purchase in allUserPurchases)
+            {
+                if (purchase.MovieId == movieId)
+                {
+                    await _userRepository.DeletePurchase(purchase);
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

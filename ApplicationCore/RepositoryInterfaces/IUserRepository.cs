@@ -24,5 +24,8 @@ namespace ApplicationCore.RepositoryInterfaces
         Task<Purchase> PurchaseMovie(Purchase purchase);
         Task<Review> AddReview(Review review);
         Task<Favorite> DeleteFavorite(Favorite favorite);
+        Task<Review> UpdateReview(ReviewResponseModel model);
+        Task<Purchase> DeletePurchase(Purchase purchase);
+        Task<IEnumerable<PurchaseTotalResponseModel>> GetAllUsersPurchasedMovies();
     }
 }

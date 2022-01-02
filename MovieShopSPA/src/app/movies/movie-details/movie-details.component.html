@@ -1,0 +1,92 @@
+<div class="container-fluid">
+    <div class="row" style="background: url('{{movie.backdropUrl}}') no-repeat">
+        <div class="col-4" style="text-align:center">
+            <div class="card" style="width: 90%; margin:auto">
+                <img class="card-img-top" src="{{movie.posterUrl}}" style="height:250px" alt="{{movie.title}}">
+            </div>
+        </div>
+        <div class="col-6">
+            <h3 style="color:white">{{movie.title}}</h3> 
+            <p style="color:gray; font-size:10px">{{movie.tagline}}</p>
+            <div style="color:gray; font-size:12px">
+                <b>{{movie.runTime}} m | {{movie.releaseDate}} </b> &nbsp; &nbsp;
+                <div class="genre-list" *ngFor="let genre of movie.genres">
+                    <a href="#" class="badge rounded-pill bg-secondary" style="text-decoration:none">
+                        {{genre.name}}
+                    </a>
+                </div>
+            </div>
+            <div>
+                <span class="badge bg-success">{{movie.rating}}</span>;
+            </div>
+            <div style="color:white; font-size:12px">
+                {{movie.overview}}
+            </div>
+        </div>
+        <div class="col-2" style="font-size:14px">
+            <p style="padding-top: 50px">
+                <a href="#" class="btn btn-outline-light disabled" tabindex="-1" role="button" aria-disabled="true" style="width:100px">REVIEW</a>
+            </p>
+            <p>
+                <a href="#" class="btn btn-light disabled" tabindex="-1" role="button" aria-disabled="true" style="width:100px">BUY {{movie.price}}</a>
+            </p>
+        </div>
+    </div>
+    <div class="row" style="margin-left:1%; margin-right:1%">
+        <div class="col-4 bg-light">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-light">
+                    <h5>MOVIE FACTS</h5>
+                </li>
+                <li class="list-group-item border-bottom-2 bg-light">
+                    Release Date 
+                    <span class="badge badge-pill bg-dark">{{movie.releaseDate}}</span>
+                </li>
+                <li class="list-group-item border-bottom-2 bg-light">
+                    Run Time 
+                    <span class="badge badge-pill bg-dark">{{movie.runTime}} m</span>
+                </li>
+                <li class="list-group-item border-bottom-2 bg-light">
+                    Box Office 
+                    <span class="badge badge-pill bg-dark">{{movie.revenue}}</span>
+                </li>
+                <li class="list-group-item border-bottom-2 bg-light">
+                    Budget 
+                    <span class="badge badge-pill bg-dark">{{movie.budget}}</span>
+                </li>
+            </ul>
+            <br /><br />
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-light">
+                    <h5>TRAILERS</h5>
+                </li>
+                <div class="trailer-list" *ngFor="let trailer of movie.trailers">
+                    <li class="list-group-item border-bottom-0 bg-light">
+                        <a href="{{trailer.trailerUrl}}" class="btn btn-link" role="button" style="text-decoration:none; text-align:left; color: gray">
+                            &nbsp; &nbsp;
+                            {{trailer.name}}
+                        </a>
+                    </li>
+                </div>   
+            </ul>
+        </div>
+        <div class="col">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <h5>CAST</h5>
+                </li>
+                <div class="cast-list" *ngFor="let cast of movie.casts">
+                    <li class="list-group-item">
+                        <ol class="list-group list-group-horizontal list-group-flush">
+                            <li class="list-group-item border-0" style="width: 20%">
+                                <img src = "{{cast.posterUrl}}" class="rounded-circle" style="width:40%; margin-right: 30px" />
+                            </li>
+                            <li class="list-group-item border-0" style="width: 40%">{{cast.name}}</li>
+                            <li class="list-group-item border-0">{{cast.character}}</li>
+                        </ol>
+                    </li>
+                </div>
+            </ul>
+        </div>
+     </div>
+</div>

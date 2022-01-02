@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Models;
+﻿using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using ApplicationCore.RepositoryInterfaces;
 using ApplicationCore.ServiceInterfaces;
 using Infrastructure.Repositories;
@@ -142,6 +143,44 @@ namespace Infrastructure.Services
                 });
             }
             return movieDetails;
+        }
+
+        public async Task<int> AddNewMovie(MovieDetailsResponseModel model, string admin)
+        {
+            var newMovie = new Movie
+            {
+                Title = model.Title,
+                Overview = model.Overview,
+                Tagline = model.Tagline,
+                Budget = model.Budget,
+                Revenue = model.Revenue,
+                ImdbUrl = model.ImdbUrl,
+                TmdbUrl = model.TmdbUrl,
+                PosterUrl = model.PosterUrl,
+                BackdropUrl = model.BackdropUrl,
+                OriginalLanguage = model.OriginalLanguage,
+                ReleaseDate = model.ReleaseDate,
+                RunTime = model.RunTime,
+                Price = model.Price,
+                CreatedDate = DateTime.Today,
+                UpdatedDate = DateTime.Today,
+                UpdatedBy = admin,
+                CreatedBy = admin
+            };
+            var addedMovie = await _movieRepository.AddNewMovie(newMovie);
+            return addedMovie != null ? addedMovie.Id : -1;
+        }
+
+        public async Task<bool> UpdateMovie(MovieDetailsResponseModel model, string admin)
+        {
+            var movieId = model.Id;
+            var targetMovie = await _movieRepository.GetById(movieId);
+            if (targetMovie != null)
+            {
+                await _movieRepository.UpdateMovie(model, admin);
+                return true;
+            }
+            return false;
         }
     }
 }

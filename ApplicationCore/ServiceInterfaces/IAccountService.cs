@@ -11,6 +11,6 @@ namespace ApplicationCore.ServiceInterfaces
     {
         Task<int> RegisterUser(UserRegisterRequestModel model);
         Task<UserLoginResponseModel> ValidateUser(LoginRequestModel model);
-        Task<UserRegisterRequestModel> GetRegisterForm();
+        Task<IEnumerable<PurchaseTotalResponseModel>> GetAllUsersPurchasedMovies();
     }
 }

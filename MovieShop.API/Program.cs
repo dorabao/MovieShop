@@ -19,11 +19,13 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICastService, CastService>();
 
 // Repositories Injection
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICastRepository, CastRepository>();
 
 // inject the connection string into the MovieShopSbContext constructor using DbContextOptions
 builder.Services.AddDbContext<MovieShopDbContext>(
@@ -40,6 +42,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(b =>
+{
+    b.WithOrigins(builder.Configuration.GetValue<string>("spaClientUrl")).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+});
+
 
 app.UseHttpsRedirection();
 

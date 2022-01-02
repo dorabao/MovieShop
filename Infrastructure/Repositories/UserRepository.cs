@@ -31,6 +31,13 @@ namespace Infrastructure.Repositories
             return purchasedMovies;
         }
 
+        public async Task<IEnumerable<PurchaseTotalResponseModel>> GetAllUsersPurchasedMovies()
+        {
+            var allPurchases = await _dbContext.Purchases.GroupBy(p => p.MovieId)
+                .Select(g => new PurchaseTotalResponseModel{ MovieId = g.Key, TotalPrice = g.Sum(i => i.TotalPrice) }).ToListAsync();
+            return allPurchases;
+        }
+
         public async Task<IEnumerable<Favorite>> GetUserFavoriteMovies(int id)
         {
             var favoriteMovies = await _dbContext.Favorites.Include(f => f.Movie).Where(f => f.UserId == id).ToListAsync();
@@ -65,7 +72,7 @@ namespace Infrastructure.Repositories
                 editable = true;
                 editedUser.DateOfBirth = (DateTime)userDetailsModel.DateOfBirth;
             }
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return editable;
         }
 
@@ -78,30 +85,49 @@ namespace Infrastructure.Repositories
 
         public async Task<Favorite> AddFavorite(Favorite favorite)
         {
-            var addedFavorite = await _dbContext.Favorites.AddAsync(favorite);
-            _dbContext.SaveChanges();
+            var addedFavorite = _dbContext.Favorites.Add(favorite);
+            await _dbContext.SaveChangesAsync();
             return addedFavorite.Entity;
         }
 
         public async Task<Favorite> DeleteFavorite(Favorite favorite)
         {
-            var addedFavorite = _dbContext.Favorites.Remove(favorite);
-            _dbContext.SaveChanges();
-            return addedFavorite.Entity;
+            var deletedFavorite = _dbContext.Favorites.Remove(favorite);
+            await _dbContext.SaveChangesAsync();
+            return deletedFavorite.Entity;
         }
 
         public async Task<Purchase> PurchaseMovie(Purchase purchase)
         {
-            var addedPurchase = await _dbContext.Purchases.AddAsync(purchase);
-            _dbContext.SaveChanges();
+            var addedPurchase = _dbContext.Purchases.Add(purchase);
+            await _dbContext.SaveChangesAsync();
             return addedPurchase.Entity;
+        }
+
+        public async Task<Purchase> DeletePurchase(Purchase purchase)
+        {
+            var deletedPurchase = _dbContext.Purchases.Remove(purchase);
+            await _dbContext.SaveChangesAsync();
+            return deletedPurchase.Entity;
         }
 
         public async Task<Review> AddReview(Review review)
         {
-            var addedReview = await _dbContext.Reviews.AddAsync(review);
-            _dbContext.SaveChanges();
+            var addedReview = _dbContext.Reviews.Add(review);
+            await _dbContext.SaveChangesAsync();
             return addedReview.Entity;
+        }
+
+        public async Task<Review> UpdateReview(ReviewResponseModel model)
+        {
+            var targetReview = await _dbContext.Reviews.SingleOrDefaultAsync(r => r.MovieId == model.MovieId);
+            if (targetReview != null)
+            {
+                targetReview.ReviewText = model.ReviewText;
+                targetReview.Rating = model.Rating;
+            }
+            await _dbContext.SaveChangesAsync();
+            return targetReview;
         }
     }
 }

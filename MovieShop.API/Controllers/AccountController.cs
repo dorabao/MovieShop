@@ -22,7 +22,7 @@ namespace MovieShop.API.Controllers
         [Route("")]
         public async Task<IActionResult> Register()
         {
-            var userForm = await _accountService.GetRegisterForm();
+            var userForm = new UserRegisterRequestModel();
             return Ok(userForm);
         }
 

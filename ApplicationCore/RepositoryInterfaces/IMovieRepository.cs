@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace ApplicationCore.RepositoryInterfaces
         Task<IEnumerable<Movie>> Get100NewReleaseMovies();
         Task<IEnumerable<MovieGenre>> GetMoviesByGenreId(int genreId);
         Task<IEnumerable<Review>> GetAllReviewsByMovieId(int id);
+        Task<Movie> AddNewMovie(Movie movie);
+        Task<Movie> UpdateMovie(MovieDetailsResponseModel model, string admin);
     }
 }

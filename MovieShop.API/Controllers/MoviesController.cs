@@ -44,12 +44,9 @@ namespace MovieShop.API.Controllers
         public async Task<IActionResult> GetTopRevenueMovies()
         {
             var movies = await _movieService.GetHighestGrossingMovies();
-            if (!movies.Any())
-            {
-                return NotFound();
-            }
             return Ok(movies);
         }
+     
 
         [HttpGet]
         [Route("{id:int}")]

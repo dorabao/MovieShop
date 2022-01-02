@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using ApplicationCore.Models;
 using ApplicationCore.RepositoryInterfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,38 @@ namespace Infrastructure.Repositories
             var reviews = await _dbContext.Reviews.Include(r => r.Movie).Where(r => r.MovieId == id).ToListAsync();
             if (reviews == null) return null;
             return reviews;
+        }
+
+        public async Task<Movie> AddNewMovie(Movie movie)
+        { 
+            var createdMovie = _dbContext.Movies.Add(movie);
+            await _dbContext.SaveChangesAsync();
+            return createdMovie.Entity;
+        }
+
+        public async Task<Movie> UpdateMovie(MovieDetailsResponseModel model, string admin)
+        {
+            var targetMovie = await _dbContext.Movies.SingleOrDefaultAsync(m => m.Id == model.Id);
+            if (targetMovie != null)
+            {
+                targetMovie.Title = model.Title;
+                targetMovie.Overview = model.Overview;
+                targetMovie.Tagline = model.Tagline;
+                targetMovie.Budget = model.Budget;
+                targetMovie.Revenue = model.Revenue;
+                targetMovie.ImdbUrl = model.ImdbUrl;
+                targetMovie.TmdbUrl = model.TmdbUrl;
+                targetMovie.PosterUrl = model.PosterUrl;
+                targetMovie.BackdropUrl = model.BackdropUrl;
+                targetMovie.OriginalLanguage = model.OriginalLanguage;
+                targetMovie.ReleaseDate = model.ReleaseDate;
+                targetMovie.RunTime = model.RunTime;
+                targetMovie.Price = model.Price;
+                targetMovie.UpdatedDate = DateTime.Today;
+                targetMovie.UpdatedBy = admin;
+            }
+            await _dbContext.SaveChangesAsync();
+            return targetMovie;
         }
     }
 }

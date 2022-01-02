@@ -18,5 +18,7 @@ namespace ApplicationCore.ServiceInterfaces
         Task<bool> PurchaseMovie(MovieDetailsResponseModel model, int userId);
         Task<bool> AddReview(ReviewResponseModel model, int userId);
         Task<bool> DeleteFavoriteMovie(MovieCardResponseModel model, int userId);
+        Task<ReviewResponseModel> UpdateReview(ReviewResponseModel model);
+        Task<bool> DeleteMovie(int userId, int movieId);
     }
 }
